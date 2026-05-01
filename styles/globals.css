@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #050810;
+  --surface: #0b1020;
+  --surface2: #111827;
+  --border: #1e2d4a;
+  --accent: #00e5ff;
+  --accent2: #7b61ff;
+  --accent3: #00ff94;
+  --warn: #ff9f0a;
+  --danger: #ff3b5c;
+  --text: #e8edf5;
+  --muted: #5c6b8a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Grid BG */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glow effects */
+.bg-glow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse, rgba(0,229,255,0.06) 0%, transparent 70%);
+}
+.bg-glow2 {
+  position: fixed;
+  bottom: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse, rgba(123,97,255,0.07) 0%, transparent 70%);
+}
+
+/* Severity colours */
+.severity-critical { color: var(--danger); border-color: var(--danger); }
+.severity-high { color: var(--warn); border-color: var(--warn); }
+.severity-medium { color: #f59e0b; border-color: #f59e0b; }
+.severity-low { color: var(--accent3); border-color: var(--accent3); }
+.severity-info { color: var(--accent); border-color: var(--accent); }
+
+@layer utilities {
+  .text-accent { color: var(--accent); }
+  .text-muted  { color: var(--muted); }
+  .border-surface { border-color: var(--border); }
+}
