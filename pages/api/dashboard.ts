@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Fetch contracts separately
-    const contractIds = [...new Set(analyses.map((a) => a.contract_id))];
+    const contractIds = Array.from(new Set(analyses.map((a) => a.contract_id)));
     const { data: contracts } = await db
       .from('contracts')
       .select('id, name, benchmark_label, created_at')
