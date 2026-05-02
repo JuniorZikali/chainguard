@@ -1,7 +1,7 @@
 # ChainGuard — AI-Powered Smart Contract Auditor (v2)
 
 > **HIT Honours Project · Information Security & Assurance · 2025**  
-> Built with Next.js · Deployed on Vercel · Supabase PostgreSQL
+> Built with Next.js · Deployed on Vercel · Supabase PostgreSQL · Groq AI
 
 ---
 
@@ -10,53 +10,37 @@
 ### Step 1 — Set up Supabase
 
 1. Go to [supabase.com](https://supabase.com) → **New Project**
-2. Choose a name (e.g. `chainguard`) and set a strong DB password
-3. Wait ~2 minutes for it to spin up
-4. Go to **SQL Editor** → paste the entire contents of `supabase/schema.sql` → **Run**
-5. Go to **Project Settings → API** and copy:
+2. Go to **SQL Editor** → paste the entire contents of `supabase/schema.sql` → **Run**
+3. Go to **Project Settings → API** and copy:
    - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
    - `anon / public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY`
 
-### Step 2 — Get Gemini API Key
+### Step 2 — Get Groq API Key (free)
 
-1. Go to [aistudio.google.com](https://aistudio.google.com/app/apikey)
-2. Click **Create API Key** (free tier is sufficient for demo)
-3. Copy it → `GEMINI_API_KEY`
+1. Go to [console.groq.com](https://console.groq.com) → Sign up (free, no card needed)
+2. Click **API Keys** → **Create Key** → copy it → `GROQ_API_KEY`
 
 ### Step 3 — Deploy to Vercel
 
-#### Option A: GitHub (recommended)
 ```bash
-git init
 git add .
-git commit -m "initial chainguard deploy"
-gh repo create chainguard --public --push   # requires GitHub CLI
+git commit -m "chainguard v2 - groq + supabase"
+git push
 ```
-Then:
-1. Go to [vercel.com](https://vercel.com) → **Add New → Project**
-2. Import your GitHub repo
-3. Add environment variables (from step 1 & 2):
+
+1. Go to [vercel.com](https://vercel.com) → **Add New Project** → Import repo
+2. Add environment variables:
    ```
    NEXT_PUBLIC_SUPABASE_URL=...
    NEXT_PUBLIC_SUPABASE_ANON_KEY=...
    SUPABASE_SERVICE_ROLE_KEY=...
-   GEMINI_API_KEY=...
+   GROQ_API_KEY=...
    ```
-4. Click **Deploy** → done!
+3. Click **Deploy**
 
-#### Option B: Vercel CLI
-```bash
-npm i -g vercel
-vercel                    # follow prompts
-vercel env add NEXT_PUBLIC_SUPABASE_URL
-vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
-vercel env add SUPABASE_SERVICE_ROLE_KEY
-vercel env add GEMINI_API_KEY
-vercel --prod
-```
+### Step 4 — Run locally
 
-### Step 4 — Test locally first
 ```bash
 cp .env.example .env.local
 # Fill in your keys in .env.local
@@ -77,15 +61,15 @@ npm run dev
                        │ HTTPS
 ┌──────────────────────▼──────────────────────────────────┐
 │                VERCEL SERVERLESS                        │
-│  /api/contracts  → Upload .sol source code              │
-│  /api/analyses   → Trigger AI analysis pipeline         │
+│  /api/contracts     → Upload .sol source code           │
+│  /api/analyses      → Trigger AI analysis pipeline      │
 │  /api/analyses/[id] → Poll for results                  │
-│  /api/dashboard  → List all audits                      │
+│  /api/dashboard     → List all audits                   │
 └──────────┬─────────────────────────────────┬────────────┘
            │                                 │
 ┌──────────▼──────────┐         ┌────────────▼────────────┐
-│   SUPABASE DB       │         │   GOOGLE GEMINI API     │
-│   PostgreSQL        │         │   gemini-2.0-flash        │
+│   SUPABASE DB       │         │   GROQ API              │
+│   PostgreSQL        │         │   llama-3.3-70b         │
 │                     │         │                         │
 │  contracts          │         │  • Invariant discovery  │
 │  analyses           │         │  • Vulnerability scan   │
@@ -97,7 +81,7 @@ npm run dev
 
 ### Pipeline (per audit)
 ```
-.sol upload → Supabase(contracts) → Gemini analysis →
+.sol upload → Supabase(contracts) → Groq LLM analysis →
   Invariants → Supabase(properties)
   Findings   → Supabase(findings)
   Summary    → analyses.summary
@@ -127,7 +111,7 @@ chainguard/
 │   └── RecentAudits.tsx      # Sidebar with audit history
 ├── lib/
 │   ├── supabase.ts           # Supabase client
-│   ├── gemini.ts             # Gemini API + prompts
+│   ├── llm.ts                # Groq AI client + prompts
 │   └── types.ts              # Shared TypeScript types
 ├── styles/
 │   └── globals.css
@@ -140,30 +124,23 @@ chainguard/
 
 ## 🔧 Running Foundry Tests Locally
 
-The AI generates Foundry fuzz test files that you can download and run locally:
+Download the generated fuzz test file from the UI and run it locally:
 
 ```bash
 # Install Foundry (Linux/WSL2)
 curl -L https://foundry.paradigm.xyz | bash
 foundryup
 
-# Create a Foundry project
 forge init audit-workspace
 cd audit-workspace
-
-# Copy your contract
 cp YourContract.sol src/
-
-# Paste the downloaded fuzz test into test/
 cp YourContractFuzzTest.t.sol test/
-
-# Run!
 forge test --match-contract Fuzz -vvv
 ```
 
 ---
 
-## 📊 Database Schema (Supabase)
+## 📊 Database Schema
 
 | Table | Purpose |
 |-------|---------|
@@ -172,19 +149,6 @@ forge test --match-contract Fuzz -vvv
 | `properties` | Discovered invariants (from LLM) |
 | `findings` | Vulnerabilities with severity + remediation |
 | `audit_logs` | Immutable SHA-256 chained audit trail |
-
----
-
-## 🎓 Academic Context
-
-This project is submitted as the practical component of a Bachelor of Technology (Honours) in Information Security and Assurance at the **Harare Institute of Technology**.
-
-The system implements the **Invariant Transpilation Pipeline** described in Chapter 4:
-1. `extract_ast` → Gemini parses Solidity semantics
-2. `generate_prompt` → Structured system prompt for invariant discovery  
-3. `parse_llm_response` → JSON extraction + validation
-4. `write_test_file` → Foundry-compatible test generation
-5. `audit_log` → SHA-256 chained immutable log (no Merkle tree needed for scope)
 
 ---
 
