@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS contracts (
 CREATE TABLE IF NOT EXISTS analyses (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   contract_id     UUID REFERENCES contracts(id) ON DELETE CASCADE,
-  llm_model       TEXT NOT NULL DEFAULT 'gemini-1.5-pro',
+  llm_model       TEXT NOT NULL DEFAULT 'gemini-2.0-flash',
   prompt_version  TEXT NOT NULL DEFAULT 'v2',
   status          TEXT NOT NULL DEFAULT 'pending'
                     CHECK (status IN ('pending','running','completed','failed')),

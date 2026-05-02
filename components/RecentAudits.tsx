@@ -21,7 +21,7 @@ export default function RecentAudits({ onSelect, selectedId, refreshKey }: Props
   useEffect(() => {
     fetch('/api/dashboard')
       .then((r) => r.json())
-      .then(setAudits)
+      .then((data) => setAudits(Array.isArray(data) ? data : []))
       .catch(console.error);
   }, [refreshKey]);
 

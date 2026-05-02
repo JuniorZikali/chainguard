@@ -133,7 +133,7 @@ export default function AnalysisResult({ analysisId, onBack }: Props) {
             AI ANALYSIS IN PROGRESS
           </p>
           <p style={{ color: '#5c6b8a', fontSize: 13 }}>
-            Gemini is scanning your contract for vulnerabilities and invariants...
+            Groq AI is scanning your contract for vulnerabilities and invariants...
           </p>
         </div>
       )}

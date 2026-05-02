@@ -85,7 +85,7 @@ npm run dev
            │                                 │
 ┌──────────▼──────────┐         ┌────────────▼────────────┐
 │   SUPABASE DB       │         │   GOOGLE GEMINI API     │
-│   PostgreSQL        │         │   gemini-1.5-pro        │
+│   PostgreSQL        │         │   gemini-2.0-flash        │
 │                     │         │                         │
 │  contracts          │         │  • Invariant discovery  │
 │  analyses           │         │  • Vulnerability scan   │

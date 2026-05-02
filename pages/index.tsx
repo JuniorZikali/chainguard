@@ -30,7 +30,7 @@ export default function Home() {
             borderRadius: 20, padding: '5px 14px', marginBottom: 20,
           }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00ff94', display: 'inline-block' }} />
-            AI-POWERED · GEMINI 1.5 PRO · SUPABASE PERSISTENCE
+            AI-POWERED · GROQ LLAMA 3.3 · SUPABASE PERSISTENCE
           </div>
           <h1 style={{
             fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800,
@@ -52,7 +52,7 @@ export default function Home() {
         }}>
           {[
             { label: 'VULNERABILITY CLASSES', value: '12+', color: '#ff3b5c' },
-            { label: 'LLM MODEL', value: 'Gemini', color: '#00e5ff' },
+            { label: 'LLM MODEL', value: 'Groq', color: '#00e5ff' },
             { label: 'INVARIANT TYPES', value: '5', color: '#7b61ff' },
             { label: 'AUDIT CHAIN', value: 'SHA-256', color: '#00ff94' },
           ].map(({ label, value, color }) => (
@@ -99,7 +99,7 @@ export default function Home() {
               </p>
               {[
                 ['01', 'Upload .sol file or paste code'],
-                ['02', 'Gemini AI discovers invariants'],
+                ['02', 'Groq AI discovers invariants'],
                 ['03', 'Vulnerabilities are classified'],
                 ['04', 'Foundry fuzz tests generated'],
                 ['05', 'Results stored in Supabase'],
