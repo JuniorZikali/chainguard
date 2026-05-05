@@ -184,7 +184,7 @@ await fetch('/api/analyses/terminate', {
           <div style={{ display: 'flex', gap: 12 }}>
             {[
               { label: 'LOCAL', url: 'http://localhost:3000' },
-              { label: 'PRODUCTION', url: 'https://your-project.vercel.app' },
+              { label: 'PRODUCTION', url: 'https://chainguard-gold.vercel.app/' },
             ].map(({ label, url }) => (
               <div key={label} style={{ flex: 1, padding: '14px 18px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8 }}>
                 <p style={{ fontFamily: 'Space Mono, monospace', fontSize: 10, color: '#94a3b8', marginBottom: 6 }}>{label}</p>
