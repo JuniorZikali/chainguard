@@ -1,92 +1,84 @@
 import React from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+
+  const navItems = [
+    { label: 'Dashboard', href: '/' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'API', href: '/api-reference' },
+  ];
+
   return (
     <>
       <Head>
         <title>ChainGuard — Smart Contract Auditor</title>
         <meta name="description" content="AI-Powered Smart Contract Auditing Framework" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2300e5ff'/><text y='24' font-size='20' fill='%23050810'>⬡</text></svg>" />
       </Head>
 
-      {/* Background effects */}
       <div className="bg-grid" />
       <div className="bg-glow" />
       <div className="bg-glow2" />
 
-      {/* Navigation */}
-      <nav
-        style={{
-          position: 'relative',
-          zIndex: 10,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '20px 48px',
-          borderBottom: '1px solid #1e2d4a',
-          background: 'rgba(5,8,16,0.85)',
-          backdropFilter: 'blur(12px)',
-        }}
-      >
+      <nav style={{
+        position: 'relative', zIndex: 10,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '16px 48px',
+        borderBottom: '1px solid #e2e8f0',
+        background: 'rgba(248,250,252,0.9)',
+        backdropFilter: 'blur(12px)',
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div
-            style={{
-              width: 32, height: 32,
-              background: 'linear-gradient(135deg, #00e5ff, #7b61ff)',
-              borderRadius: 8,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 16, fontWeight: 700, color: '#050810',
-            }}
-          >
-            ⬡
-          </div>
-          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 20, letterSpacing: -0.5 }}>
-            Chain<span style={{ color: '#00e5ff' }}>Guard</span>
+          <div style={{
+            width: 32, height: 32,
+            background: 'linear-gradient(135deg, #0ea5e9, #7c3aed)',
+            borderRadius: 8, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', fontSize: 16, fontWeight: 700, color: '#fff',
+          }}>⬡</div>
+          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 20, letterSpacing: -0.5, color: '#0f172a' }}>
+            Chain<span style={{ color: '#0ea5e9' }}>Guard</span>
           </span>
-          <span
-            style={{
-              fontFamily: 'Space Mono, monospace', fontSize: 11, color: '#5c6b8a',
-              border: '1px solid #1e2d4a', borderRadius: 4, padding: '3px 8px',
-            }}
-          >
-            v2.0 · HIT
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-          {['Dashboard', 'Docs', 'API'].map((item) => (
-            <a
-              key={item}
-              href={item === 'Dashboard' ? '/' : '#'}
-              style={{
-                fontSize: 13, fontWeight: 600, color: '#5c6b8a',
-                textDecoration: 'none', letterSpacing: 0.5, textTransform: 'uppercase',
-                transition: 'color 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#e8edf5')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#5c6b8a')}
-            >
-              {item}
-            </a>
-          ))}
-        </div>
-
-        <div
-          style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            fontFamily: 'Space Mono, monospace', fontSize: 11, color: '#00e5ff',
-          }}
-        >
           <span style={{
-            width: 8, height: 8, borderRadius: '50%', background: '#00ff94',
-            display: 'inline-block', animation: 'pulse 2s infinite',
-          }} />
+            fontFamily: 'Space Mono, monospace', fontSize: 11, color: '#64748b',
+            border: '1px solid #e2e8f0', borderRadius: 4, padding: '3px 8px',
+            background: '#f1f5f9',
+          }}>v2.0 · HIT</span>
+        </div>
+
+        <div style={{ display: 'flex', gap: 4 }}>
+          {navItems.map(({ label, href }) => {
+            const active = router.pathname === href;
+            return (
+              <a key={label} href={href} style={{
+                fontSize: 13, fontWeight: 600, padding: '7px 16px', borderRadius: 8,
+                textDecoration: 'none', letterSpacing: 0.3,
+                background: active ? '#0ea5e9' : 'transparent',
+                color: active ? '#fff' : '#64748b',
+                transition: 'all 0.2s',
+                border: active ? '1px solid #0ea5e9' : '1px solid transparent',
+              }}
+              onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = '#f1f5f9'; e.currentTarget.style.color = active ? '#fff' : '#0f172a'; }}
+              onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = active ? '#fff' : '#64748b'; }}
+              >
+                {label}
+              </a>
+            );
+          })}
+        </div>
+
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          fontFamily: 'Space Mono, monospace', fontSize: 11, color: '#10b981',
+          background: '#f0fdf4', border: '1px solid #bbf7d0',
+          borderRadius: 20, padding: '5px 12px',
+        }}>
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
           LIVE · SUPABASE
         </div>
       </nav>
 
-      {/* Main content */}
       <main style={{ position: 'relative', zIndex: 1 }}>
         {children}
       </main>
